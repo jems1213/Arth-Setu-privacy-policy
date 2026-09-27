@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Join a group on Tally</title>
+  <meta name="description" content="You've been invited to split expenses on Tally.">
+  <meta property="og:title" content="You're invited to a group on Tally">
+  <meta property="og:description" content="Track and split expenses with friends. Tap to join.">
+  <style>
+    :root { --ink:#1C2733; --muted:#5A6572; --faint:#8B94A1; --bg:#F7F9FB; --card:#fff; --border:#E4E9EE; --accent:#3B7EC4; }
+    @media (prefers-color-scheme: dark) {
+      :root { --ink:#F0F4F8; --muted:#9BA7B4; --faint:#606E7D; --bg:#0E141B; --card:#161F28; --border:#222E3C; --accent:#4C8FD6; }
+    }
+    * { box-sizing: border-box; }
+    body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+           background:var(--bg); color:var(--ink); font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; padding:24px 16px; }
+    main { width:100%; max-width:420px; background:var(--card); border:1px solid var(--border); border-radius:24px; padding:28px 24px; text-align:center; }
+    .logo { width:72px; height:72px; margin:0 auto 12px; }
+    h1 { font-size:22px; margin:0 0 6px; }
+    p { color:var(--muted); margin:0 0 20px; }
+    a.btn, button.btn { display:block; width:100%; padding:14px; border-radius:14px; font-weight:600; font-size:16px;
+             text-decoration:none; border:0; cursor:pointer; margin-bottom:10px; }
+    .primary { background:var(--ink); color:var(--bg); }
+    .secondary { background:transparent; color:var(--ink); border:1px solid var(--border) !important; }
+    .code { margin-top:18px; padding:12px; border:1px dashed var(--border); border-radius:12px; font:13px ui-monospace,monospace; word-break:break-all; color:var(--ink); }
+    .hint { font-size:13px; color:var(--faint); margin-top:10px; }
+    .hidden { display:none; }
+  </style>
+</head>
+<body>
+<main>
+  <svg class="logo" viewBox="0 0 100 100" aria-hidden="true">
+    <rect x="5" y="5" width="90" height="90" rx="22" fill="#1C2733"/>
+    <g stroke="#F7F9FB" stroke-width="6.2" stroke-linecap="round">
+      <line x1="34.25" y1="32" x2="34.25" y2="68"/><line x1="44.75" y1="32" x2="44.75" y2="68"/>
+      <line x1="55.25" y1="32" x2="55.25" y2="68"/><line x1="65.75" y1="32" x2="65.75" y2="68"/>
+    </g>
+    <line x1="26.4" y1="63.7" x2="73.6" y2="36.3" stroke="#4C8FD6" stroke-width="6.5" stroke-linecap="round"/>
+  </svg>
+  <h1>You're invited to a group</h1>
+  <p>Split bills and settle up with friends on Tally.</p>
+
+  <div id="valid">
+    <a id="open" class="btn primary" href="#">Open in Tally</a>
+    <a id="store" class="btn secondary" href="#">Get Tally on Google Play</a>
+    <div class="hint">New to Tally? Install it, then open <b>Groups → Join with a code</b> and paste this code:</div>
+    <div class="code" id="code"></div>
+    <button id="copy" class="btn secondary" style="margin-top:10px">Copy invite code</button>
+  </div>
+  <p id="invalid" class="hidden">This invite link looks incomplete. Ask your friend to share it again.</p>
+</main>
+<script>
+  (function () {
+    var PKG = 'com.javiy.expenseTracker';
+    var params = new URLSearchParams(location.search);
+    var raw = params.get('t') || params.get('join') || location.hash.replace('#', '');
+    var m = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i.exec(raw || '');
+    if (!m) {
+      document.getElementById('valid').classList.add('hidden');
+      document.getElementById('invalid').classList.remove('hidden');
+      return;
+    }
+    var token = m[0];
+    var store = 'https://play.google.com/store/apps/details?id=' + PKG +
+      '&referrer=' + encodeURIComponent('join=' + token);
+    var isAndroid = /android/i.test(navigator.userAgent);
+    // Android: intent URL opens the app if installed, otherwise Chrome follows the fallback to Play.
+    var open = isAndroid
+      ? 'intent://join/' + token + '#Intent;scheme=tally;package=' + PKG +
+        ';S.browser_fallback_url=' + encodeURIComponent(store) + ';end'
+      : 'tally://join/' + token;
+
+    document.getElementById('code').textContent = token;
+    document.getElementById('open').href = open;
+    document.getElementById('store').href = store;
+    document.getElementById('copy').addEventListener('click', function () {
+      var btn = this;
+      var done = function () { btn.textContent = 'Copied ✓'; };
+      if (navigator.clipboard) navigator.clipboard.writeText(token).then(done, done); else done();
+    });
+    if (isAndroid) location.href = open; // try to jump straight into the app
+  })();
+</script>
+</body>
+</html>
