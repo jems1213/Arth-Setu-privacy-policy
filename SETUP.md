@@ -17,7 +17,7 @@ git push -u origin main
 
 6. Open https://github.com/jems1213/arth-setu-privacy-policy/settings/pages
 7. **Source:** Deploy from branch → **main** → **/ (root)** → **Save**
-8. Wait 1–3 minutes, then open https://jems1213.github.io/arth-setu-privacy-policy/
+8. Wait 1–3 minutes, then open https://jems1213.github.io/Arth-Setu-privacy-policy/
 
 ## Option B — GitHub CLI
 
@@ -31,6 +31,6 @@ Then enable Pages (step 6–8 above).
 
 ## Play Store URL
 
-Use: `https://jems1213.github.io/arth-setu-privacy-policy/`
+Use: `https://jems1213.github.io/Arth-Setu-privacy-policy/`
 
 The Arth Setu app (`Expense-track`) already points to this URL in `lib/constants/app_branding.dart`.
