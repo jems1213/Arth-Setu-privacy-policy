@@ -1,6 +1,6 @@
-# Arth Setu — Privacy Policy
+# Tally (formerly Arth Setu) — Privacy Policy
 
-Static privacy policy page for the **Arth Setu** Android app (`com.javiy.expenseTracker`).
+Static privacy policy page for the **Tally** Android app (formerly **Arth Setu**) (`com.javiy.expenseTracker`).
 
 **Live URL:** https://jems1213.github.io/arth-setu-privacy-policy/
 
